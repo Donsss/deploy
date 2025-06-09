@@ -4,4 +4,3 @@ joblib==1.5.1
 numpy>=1.26.0
 pandas==2.3.0
 Pillow==11.2.1
-tensorflow==2.19.0
