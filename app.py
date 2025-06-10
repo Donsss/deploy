@@ -7,13 +7,13 @@ from io import BytesIO
 from flask_cors import CORS 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/predict_crop": {"origins": "*"}})
 
 model = joblib.load('models/model.joblib')
 scaler = joblib.load('models/scaler.joblib')
 label_encoder = joblib.load('models/label_encoder.joblib')
 
-@app.route('/predict_crop', methods=['POST'])
+@app.route('/predict_crop', methods=['POST', 'OPTIONS'])
 def predict_crop():
     data_input = request.json
     array = pd.DataFrame([{
