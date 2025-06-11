@@ -6,4 +6,3 @@ pandas==2.3.0
 Pillow==11.2.1
 scikit-learn==1.6.1
 gunicorn
-tensorflow-cpu
