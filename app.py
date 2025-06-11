@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Konfigurasi CORS lebih ketat
 CORS(app, resources={
     r"/predict_crop": {
-        "origins": ["http://localhost:5173"],
+        "origins": ["http://localhost:5173","https://coba-coba-deploy.netlify.app/"],
         "methods": ["POST", "OPTIONS"],
         "allow_headers": ["Content-Type"]
     }
