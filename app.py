@@ -5,10 +5,17 @@ import numpy as np
 from flask_cors import CORS
 
 app = Flask(__name__)
-# Konfigurasi CORS lebih ketat
+
+# Daftar origin yang diizinkan
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://coba-coba-deploy.netlify.app"
+]
+
+# Konfigurasi CORS
 CORS(app, resources={
     r"/predict_crop": {
-        "origins": ["http://localhost:5173","https://coba-coba-deploy.netlify.app/","https://coba-coba-deploy.netlify.app"],
+        "origins": ALLOWED_ORIGINS,
         "methods": ["POST", "OPTIONS"],
         "allow_headers": ["Content-Type"]
     }
@@ -21,16 +28,21 @@ label_encoder = joblib.load('models/label_encoder.joblib')
 
 @app.route('/predict_crop', methods=['POST', 'OPTIONS'])
 def predict_crop():
+    # Handle preflight request
     if request.method == 'OPTIONS':
-        # Response preflight khusus
         response = jsonify({"message": "Preflight successful"})
-        response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+        response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
         response.headers.add("Access-Control-Allow-Headers", "Content-Type")
         response.headers.add("Access-Control-Allow-Methods", "POST")
-        return response, 200  # Pastikan status code 200
+        return response
 
     # Handle POST request
     try:
+        # Validasi origin
+        origin = request.headers.get('Origin')
+        if origin not in ALLOWED_ORIGINS:
+            return jsonify({"error": "Origin not allowed"}), 403
+
         data_input = request.json
         array = pd.DataFrame([{
             'N': data_input['N'],
@@ -54,16 +66,12 @@ def predict_crop():
         }
 
         response = jsonify(crop_response)
-        response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
-        response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app/")
-        response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app")
+        response.headers.add("Access-Control-Allow-Origin", origin)
         return response
 
     except Exception as e:
         error_response = jsonify({"error": str(e)})
-        error_response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
-        error_response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app/")
-        error_response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app")
+        error_response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin'))
         return error_response, 400
 
 if __name__ == '__main__':
