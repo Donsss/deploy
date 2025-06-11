@@ -55,11 +55,15 @@ def predict_crop():
 
         response = jsonify(crop_response)
         response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+        response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app/")
+        response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app")
         return response
 
     except Exception as e:
         error_response = jsonify({"error": str(e)})
         error_response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+        error_response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app/")
+        error_response.headers.add("Access-Control-Allow-Origin", "https://coba-coba-deploy.netlify.app")
         return error_response, 400
 
 if __name__ == '__main__':
