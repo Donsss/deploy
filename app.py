@@ -9,7 +9,8 @@ app = Flask(__name__)
 # Daftar origin yang diizinkan
 ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://coba-coba-deploy.netlify.app"
+    "https://coba-coba-deploy.netlify.app",
+    "https://pendeteksi-penyakit-pada-tanaman-padi.netlify.app"
 ]
 
 # Konfigurasi CORS
